@@ -236,6 +236,7 @@ jobs:
           REPOS["Appendix"]="Numbersf|Kernel_Manifest_Appendix"
 
           FOUND_REPO=""
+          FOUND_REPO_NAME=""
           FOUND_BRANCH=""
 
           check_repo() {
@@ -1150,6 +1151,29 @@ jobs:
             set_config "CONFIG_IP_NF_MANGLE=y"
             set_config "CONFIG_IP6_NF_MANGLE=y"
           fi
+
+          # Atheros AR9271 and internal Wi-Fi stack configurations (Built-in)
+          set_config "CONFIG_RFKILL=y"
+          set_config "CONFIG_USB=y"
+          set_config "CONFIG_CRYPTO=y"
+          set_config "CONFIG_NEW_LEDS=y"
+          set_config "CONFIG_LEDS_CLASS=y"
+          set_config "CONFIG_MODULES=y"
+          set_config "CONFIG_MODULE_UNLOAD=y"
+          set_config "CONFIG_NET_RADIO=y"
+          set_config "CONFIG_WLAN=y"
+          set_config "CONFIG_CFG80211=y"
+          set_config "CONFIG_MAC80211=y"
+          set_config "CONFIG_MAC80211_LEDS=y"
+          set_config "CONFIG_WLAN_VENDOR_ATH=y"
+          set_config "CONFIG_ATH_COMMON=y"
+          set_config "CONFIG_ATH10K=y"
+          set_config "CONFIG_ATH9K=y"
+          set_config "CONFIG_ATH9K_HW=y"
+          set_config "CONFIG_ATH9K_HTC=y"
+          set_config "CONFIG_ATH9K_COMMON=y"
+          set_config "CONFIG_ATH10K_USB=y"
+          set_config "CONFIG_FW_LOADER=y"
 
           # 构建依赖项调整及优化
           if [ "$KERNEL_VERSION" = "5.15" ] && [[ "$CPU" == mt* ]]; then
