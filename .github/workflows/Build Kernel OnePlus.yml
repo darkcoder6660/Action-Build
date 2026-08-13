@@ -124,7 +124,7 @@ on:
         type: boolean
         description: "是否启用极速构建？//Enable ultra-fast build?"
         required: true
-        default: true
+        default: false
       LSM_BBG:
         type: boolean
         description: "是否启用关键分区写入保护模块(BBG)？//Enable critical partition write protection module (BBG)?"
@@ -1463,6 +1463,21 @@ jobs:
             cp "$image_path" ./AnyKernel3/Image
             cp "$image_path" kernel_workspace/kernel_platform/out/Final-Image-Find/Image
           fi
+
+          # >>> 打包编译生成的 .ko 模块到 AnyKernel3 <<<
+          echo "正在打包编译生成的 .ko 模块到 AnyKernel3..."
+          mkdir -p ./AnyKernel3/modules/vendor/lib/modules
+          
+          # 查找并拷贝所有编译出的 .ko 文件
+          if [ -d "./kernel_workspace/kernel_platform/out/" ]; then
+            find ./kernel_workspace/kernel_platform/out/ -type f -name "*.ko" -exec cp {} ./AnyKernel3/modules/vendor/lib/modules/ \;
+          elif [ -d "./kernel_workspace/kernel_platform/common/out/" ]; then
+            find ./kernel_workspace/kernel_platform/common/out/ -type f -name "*.ko" -exec cp {} ./AnyKernel3/modules/vendor/lib/modules/ \;
+          fi
+          
+          # 检查是否有文件被拷贝
+          KO_COUNT=$(ls -1 ./AnyKernel3/modules/vendor/lib/modules/*.ko 2>/dev/null | wc -l || echo "0")
+          echo "✅ 共收集到 $KO_COUNT 个 .ko 文件！"
 
       - name: Apply KPX and Replace Image
         if: ${{ github.event.inputs.KPM != 'N/A' }}
